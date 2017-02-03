@@ -1,82 +1,130 @@
-function Item(itemName, unitPrice) {
-  this.name   = itemName;
-  this.price  = unitPrice;
-}
+//Main method
+window.onload = function() {
 
-function deleteItem(e){
+  //Retrive all items in the cart, creating an array of Item objects
+  var items = gatherItemInfo(document);
 
-}
+  //Add listener functions for handling user input
+  attachListeners(document, items);
 
-function getPriceByProduct(itemNode){
+};
 
-}
+//Item class
+function Item(itemName, unitPrice, quantityInputEl) {
 
-function updatePriceByProduct(productPrice, index){
 
-}
+  this.name = itemName;
 
-function getTotalPrice(e) {
+  //unitPrice       = unitPrice.replace(/$\s/g,''); //doesn't work for some reason
+  unitPrice       = unitPrice.replace(' ','').replace('$','');
+  this.unitPrice  = parseFloat(unitPrice);
 
-}
+  this.quantity = function getQuantity() {
+    return parseInt(quantityInputEl.value);
+  };
 
-function createQuantityInput(){
-
-}
-
-function createDeleteButton(){
-
-}
-
-function createQuantityNode(){
+  this.totalPrice = function getTotalPrice() {
+    return this.quantity() * this.unitPrice;
+  };
 
 }
 
-function createItemNode(dataType, itemData){
+//Creates and returns items from the doc as an array
+function gatherItemInfo(){
 
+  //El = of type Element, NL = of type NodeList
+  let items = [];
+  let rowsNL = document.getElementsByClassName('row');
+
+  for (let i = 0; i < rowsNL.length; i++) {
+
+    let rowEl = rowsNL.item(i);
+    let colsNL = rowEl.getElementsByClassName('col');
+
+    items.push(new Item(
+      colsNL.item(0).innerHTML,
+      colsNL.item(1).innerHTML,
+      colsNL.item(2).getElementsByClassName('quantity-input').item(0)
+    ));
+  }
+
+  return items;
 }
 
-function createNewItemRow(itemName, itemUnitPrice){
+//Sets up the logic of the document
+function attachListeners(doc, items) {
 
-}
+  // let createItemButton = doc.getElementById('new-item-create');
+  let totalPriceLbl = doc.getElementById('total');
 
-function createNewItem(){
 
-}
-
-window.onload = function(){
-  var calculatePriceButton = document.getElementById('calc-prices-button');
-  // var createItemButton = document.getElementById('new-item-create');
-  var deleteButtons = document.getElementsByClassName('btn-delete');
-
-  calculatePriceButton.onclick = getTotalPrice;
   // createItemButton.onclick = createNewItem;
 
+  let deleteButtons = doc.getElementsByClassName('btn-delete');
   for (let i = 0; i < deleteButtons.length ; i++){
     deleteButtons[i].onclick = deleteItem;
   }
 
-  var cols = [];
-  var rows = document.getElementsByClassName('row');
-
-  for (let i = 0; i < rows.length; i++) {
-    let temp = rows.item(i);
-    let temp2 = temp.getElementsByClassName('col');
-
-    for (var j = 0; j < temp2.length; j++) {
-      console.log(temp2.item(j).innerHTML);
-      console.log(temp2.item(j).innerHTML.length);
-    }
+  let quantityInputs = doc.getElementsByClassName('quantity-input');
+  for (let j = 0; j < quantityInputs.length ; j++){
+    quantityInputs[j].input = console.log('Hello World!');
   }
-  // rowNodeList.forEach(function(node, nodeIndex) {
-  //   rows.push(rowNodeList.item(nodeIndex));
-  // });
 
-  // var cart = rows.(function(row) {
-  //
-  //   let cols = row.getElementsByClassName('col');
-  //   console.log(cols);
-  //   return new Item("hi", 3);
-  //
-  // });
+  function deleteItem(e){
 
-};
+  }
+
+  function getItemTotalPrice(item){
+
+  }
+
+  function updateItemTotal(e){
+    console.log('Hello World!');
+
+    updateTotalPrice();
+
+  }
+
+  function updateTotalPrice() {
+
+    //Sum the totalPrices of all items
+    let totalPrice = items.reduce(function calcTotalPrice(target, item) {
+      return target + item.totalPrice();
+    }, 0);
+
+    //Format as $totalPrice, adding .00
+    totalPrice = '$' + totalPrice.toString();
+    if (!totalPrice.includes('.')) {
+      totalPrice += '.00';
+    }
+    else {
+      totalPrice.slice(0, totalPrice.indexOf('.') + 2);
+    }
+
+    totalPriceLbl.innerHTML = totalPrice;
+  }
+
+  function createQuantityInput(){
+
+  }
+
+  function createDeleteButton(){
+
+  }
+
+  function createQuantityNode(){
+
+  }
+
+  function createItemNode(dataType, itemData){
+
+  }
+
+  function createNewItemRow(itemName, itemUnitPrice){
+
+  }
+
+  function createNewItem(){
+
+  }
+}

@@ -16,26 +16,22 @@
     </div>
     <div class="item-container">
       <div class="row">
-        <span class="col col-1">
-          Iron-Bubble-head
-        </span>
-        <span class="col col-2">
-          $25.00
-        </span>
+        <span class="col col-1">Iron-Bubble-head</span>
+        <span class="col col-2">$25.00</span>
         <span class="col col-3">
           <label class="quantity-lbl" for="input-quantity">QTY</label>
-          <input class="quantity-input" type="text">
+          <input class="quantity-input" type="number" value="0" min="0">
         </span>
-        <span class="col col-4">
-          $0.00
-        </span>
+        <span class="col col-4">$0.00</span>
         <span class="col col-5">
           <button class="btn-delete">Delete</button>
         </span>
       </div>
     </div>
     <div class="results-container">
-      <button id="calc-prices-button" class="btn-calc" type="button">Calculate Prices</button>
+      <h1>
+        Total Price: <h1 id="total">$0.00</h1>
+      </h1>
     </div>
   </div>
 
